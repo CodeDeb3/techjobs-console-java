@@ -10,6 +10,7 @@ import java.io.Reader;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Created by LaunchCode
@@ -55,6 +56,39 @@ public class JobData {
     }
 
     /**
+     * Returns results of search the jobs data by value, using
+     * inclusion of the search term
+     * case does not matter
+     *
+     * For example, searching for all "ruby" will include results
+     * with "ruby" in any field.
+     *
+     * @param value Value of teh field to search for
+     * @return List of all jobs matching the criteria after finding first match break search
+     **/
+
+    public static ArrayList<HashMap<String, String>> findByValue (String value) {
+        loadData();
+
+        value = value.toLowerCase();
+
+        ArrayList<HashMap<String, String>> jobs = new ArrayList<>();
+
+        for (HashMap<String, String> job : allJobs) {
+            for (String key : job.keySet()){
+//                String aValue = job.get(value);
+                if (job.get(key).toLowerCase().contains(value)) {
+                    jobs.add(job);
+                    break;
+
+                }
+            }
+        }
+
+        return jobs;
+    }
+
+    /**
      * Returns results of search the jobs data by key/value, using
      * inclusion of the search term.
      *
@@ -64,17 +98,20 @@ public class JobData {
      * @param column   Column that should be searched.
      * @param value Value of teh field to search for
      * @return List of all jobs matching the criteria
-     */
+     **/
+
     public static ArrayList<HashMap<String, String>> findByColumnAndValue(String column, String value) {
 
         // load data, if not already loaded
         loadData();
 
+        value = value.toLowerCase();
+
         ArrayList<HashMap<String, String>> jobs = new ArrayList<>();
 
         for (HashMap<String, String> row : allJobs) {
 
-            String aValue = row.get(column);
+            String aValue = row.get(column).toLowerCase();
 
             if (aValue.contains(value)) {
                 jobs.add(row);
